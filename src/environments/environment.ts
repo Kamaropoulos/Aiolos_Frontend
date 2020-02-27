@@ -16,7 +16,10 @@ export const environment = {
   version: env.npm_package_version + '-dev',
   serverUrl: '/api',
   defaultLanguage: 'en-US',
-  supportedLanguages: ['en-US', 'fr-FR']
+  supportedLanguages: ['en-US', 'fr-FR'],
+  mapbox: {
+    accessToken: 'pk.eyJ1Ijoia2FtYXJvcG91bG9zIiwiYSI6ImNrNzN0dzBxcjAxbzUza3Bhb2Jnd2c2cWIifQ.7CvFsos8lOlKopFajrf2FA'
+  }
 };
 
 /*
