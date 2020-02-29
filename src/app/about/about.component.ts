@@ -15,7 +15,7 @@ import { interval } from 'rxjs';
 export class AboutComponent implements OnInit {
   version: string | null = environment.version;
 
-  data: Array<Object>;
+  // data: Array<Object>;
 
   map: mapboxgl.Map;
   style = 'mapbox://styles/mapbox/streets-v11';
@@ -24,7 +24,7 @@ export class AboutComponent implements OnInit {
 
   constructor(private logsService: LogsService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     Object.getOwnPropertyDescriptor(mapboxgl, 'accessToken').set(environment.mapbox.accessToken);
     this.map = new mapboxgl.Map({
       container: 'map',
@@ -36,9 +36,9 @@ export class AboutComponent implements OnInit {
     // Add map controls
     // this.map.addControl(new mapboxgl.NavigationControl());
 
-    this.logsService.getLogs().subscribe((data: Array<Object>) => {
-      this.data = data;
-      for (let log of data) {
+    let data = await this.logsService.getUpdates();
+    for (let log of data) {
+      if (log['gps_data']['status'] == 'A') {
         let html =
           log['gps_data']['datestamp'] +
           ' ' +
@@ -58,6 +58,6 @@ export class AboutComponent implements OnInit {
           .setPopup(popup)
           .addTo(this.map);
       }
-    });
+    }
   }
 }
