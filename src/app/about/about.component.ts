@@ -22,6 +22,8 @@ export class AboutComponent implements OnInit {
   lat = 37.9838;
   lng = 23.7275;
 
+  sub: any;
+
   constructor(private logsService: LogsService) {}
 
   async ngOnInit() {
@@ -36,28 +38,30 @@ export class AboutComponent implements OnInit {
     // Add map controls
     // this.map.addControl(new mapboxgl.NavigationControl());
 
-    let data = await this.logsService.getUpdates();
-    for (let log of data) {
-      if (log['gps_data']['status'] == 'A') {
-        let html =
-          log['gps_data']['datestamp'] +
-          ' ' +
-          log['gps_data']['timestamp'] +
-          '<br><table><tr><th>Sensor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Reading</th></tr>';
-        for (let record in log['sensorReadings']) {
-          if (Object.prototype.hasOwnProperty.call(log['sensorReadings'], record)) {
-            html += '<tr><td>' + record + '</td>' + '<td>' + log['sensorReadings'][record] + '</td></tr>';
+    this.sub = interval(1000).subscribe(async val => {
+      let data = await this.logsService.getUpdates();
+      for (let log of data) {
+        if (log['gps_data']['status'] == 'A') {
+          let html =
+            log['gps_data']['datestamp'] +
+            ' ' +
+            log['gps_data']['timestamp'] +
+            '<br><table><tr><th>Sensor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Reading</th></tr>';
+          for (let record in log['sensorReadings']) {
+            if (Object.prototype.hasOwnProperty.call(log['sensorReadings'], record)) {
+              html += '<tr><td>' + record + '</td>' + '<td>' + log['sensorReadings'][record] + '</td></tr>';
+            }
           }
+          html += '</table>';
+          var popup = new mapboxgl.Popup({ offset: 25 }).setHTML(html);
+          var marker = new mapboxgl.Marker({
+            draggable: false
+          })
+            .setLngLat([log['gps_data']['longitude'], log['gps_data']['latitude']])
+            .setPopup(popup)
+            .addTo(this.map);
         }
-        html += '</table>';
-        var popup = new mapboxgl.Popup({ offset: 25 }).setHTML(html);
-        var marker = new mapboxgl.Marker({
-          draggable: false
-        })
-          .setLngLat([log['gps_data']['longitude'], log['gps_data']['latitude']])
-          .setPopup(popup)
-          .addTo(this.map);
       }
-    }
+    });
   }
 }
