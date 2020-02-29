@@ -8,11 +8,11 @@ import { LogsService } from '@app/logs.service';
 import { interval } from 'rxjs';
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss']
+  selector: 'app-map',
+  templateUrl: './map.component.html',
+  styleUrls: ['./map.component.scss']
 })
-export class AboutComponent implements OnInit {
+export class MapComponent implements OnInit {
   version: string | null = environment.version;
 
   // data: Array<Object>;
