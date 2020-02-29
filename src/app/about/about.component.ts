@@ -31,14 +31,10 @@ export class AboutComponent implements OnInit {
       style: this.style,
       center: [this.lng, this.lat],
       zoom: 9
-    }); // Add map controls
-    // this.map.addControl(new mapboxgl.NavigationControl());
+    });
 
-    var marker = new mapboxgl.Marker({
-      draggable: false
-    })
-      .setLngLat([0, 0])
-      .addTo(this.map);
+    // Add map controls
+    // this.map.addControl(new mapboxgl.NavigationControl());
 
     this.logsService.getLogs().subscribe((data: Array<Object>) => {
       this.data = data;
