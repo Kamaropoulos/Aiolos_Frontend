@@ -19,8 +19,8 @@ export class AboutComponent implements OnInit {
 
   map: mapboxgl.Map;
   style = 'mapbox://styles/mapbox/streets-v11';
-  lat = 38.06218066666667;
-  lng = 23.759690166666665;
+  lat = 37.9838;
+  lng = 23.7275;
 
   constructor(private logsService: LogsService) {}
 
@@ -29,7 +29,7 @@ export class AboutComponent implements OnInit {
     this.map = new mapboxgl.Map({
       container: 'map',
       style: this.style,
-      center: [-77.04, 38.907],
+      center: [this.lng, this.lat],
       zoom: 9
     }); // Add map controls
     // this.map.addControl(new mapboxgl.NavigationControl());
@@ -43,9 +43,18 @@ export class AboutComponent implements OnInit {
     this.logsService.getLogs().subscribe((data: Array<Object>) => {
       this.data = data;
       for (let log of data) {
-        var popup = new mapboxgl.Popup({ offset: 25 }).setText(
-          'Construction on the Washington Monument began in 1848.'
-        );
+        let html =
+          log['gps_data']['datestamp'] +
+          ' ' +
+          log['gps_data']['timestamp'] +
+          '<br><table><tr><th>Sensor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Reading</th></tr>';
+        for (let record in log['sensorReadings']) {
+          if (Object.prototype.hasOwnProperty.call(log['sensorReadings'], record)) {
+            html += '<tr><td>' + record + '</td>' + '<td>' + log['sensorReadings'][record] + '</td></tr>';
+          }
+        }
+        html += '</table>';
+        var popup = new mapboxgl.Popup({ offset: 25 }).setHTML(html);
         var marker = new mapboxgl.Marker({
           draggable: false
         })
