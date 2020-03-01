@@ -24,6 +24,8 @@ export class MapComponent implements OnInit {
 
   sub: any;
 
+  lastPoint: number[];
+
   constructor(private logsService: LogsService) {}
 
   async ngOnInit() {
@@ -69,7 +71,13 @@ export class MapComponent implements OnInit {
             .setPopup(popup)
             .addTo(this.map);
         }
+        this.lastPoint = [log['gps_data']['longitude'], log['gps_data']['latitude']];
       }
+      this.map.flyTo({
+        center: [this.lastPoint[0], this.lastPoint[1]],
+        essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+        zoom: 22
+      });
     });
   }
 }
