@@ -38,8 +38,16 @@ export class MapComponent implements OnInit {
     // Add map controls
     // this.map.addControl(new mapboxgl.NavigationControl());
 
+    var firstRun: Boolean = true;
+
     this.sub = interval(1000).subscribe(async val => {
-      let data = await this.logsService.getUpdates();
+      let data: Array<Object>;
+      if (firstRun) {
+        data = await this.logsService.getLogsFirstRun();
+        firstRun = false;
+      } else {
+        data = await this.logsService.getUpdates();
+      }
       for (let log of data) {
         if (log['gps_data']['status'] == 'A') {
           let html =

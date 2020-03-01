@@ -31,7 +31,7 @@ export class ChartComponent implements OnInit {
   dataConfig: Array<Object> = [];
 
   async ngOnInit() {
-    let data = await this.logsService.getUpdates();
+    let data = await this.logsService.getLogsFirstRun();
     for (const key in data[0]['sensorReadings']) {
       if (data[0]['sensorReadings'].hasOwnProperty(key)) {
         const element = data[0]['sensorReadings'][key];

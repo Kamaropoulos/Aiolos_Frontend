@@ -23,6 +23,12 @@ export class LogsService {
       .toPromise();
   }
 
+  async getLogsFirstRun(): Promise<Array<Object>> {
+    let data = await this.getLogs();
+    this.previousData = data;
+    return data;
+  }
+
   async getUpdates(): Promise<Array<Object>> {
     let prevData = this.previousData;
     if (!this.previousData) {
