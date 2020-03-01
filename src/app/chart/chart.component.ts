@@ -15,69 +15,97 @@ export class ChartComponent implements OnInit {
 
   constructor(private logsService: LogsService) {}
 
-  dataPoints: any[] = [];
+  dataPoints: Array<Array<Object>> = [];
+
+  chart: any;
+
+  toggleDataSeries(e: any) {
+    if (typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible) {
+      e.dataSeries.visible = false;
+    } else {
+      e.dataSeries.visible = true;
+    }
+    this.chart.render();
+  }
+
+  dataConfig: Array<Object> = [];
 
   async ngOnInit() {
+    let data = await this.logsService.getUpdates();
+    for (const key in data[0]['sensorReadings']) {
+      if (data[0]['sensorReadings'].hasOwnProperty(key)) {
+        const element = data[0]['sensorReadings'][key];
+        this.dataPoints[key] = [];
+        this.dataConfig.push({
+          type: 'line',
+          xValueType: 'dateTime',
+          // yValueFormatString: "$####.00",
+          xValueFormatString: 'hh:mm:ss TT',
+          showInLegend: true,
+          name: key,
+          dataPoints: this.dataPoints[key]
+        });
+      }
+    }
     let dpsLength = 0;
-    let chart = new CanvasJS.Chart('chartContainer', {
+    this.chart = new CanvasJS.Chart('chartContainer', {
       zoomEnabled: true,
       animationEnabled: true,
       exportEnabled: true,
       title: {
-        text: ''
+        text: 'Sensor Readings'
       },
-      data: [
-        {
-          type: 'spline',
-          dataPoints: this.dataPoints
-        }
-      ]
+      // axisX: {
+      //   title: "chart updates every second"
+      // },
+      toolTip: {
+        shared: true
+      },
+      legend: {
+        cursor: 'pointer',
+        verticalAlign: 'top',
+        fontSize: 22,
+        fontColor: 'dimGrey',
+        itemclick: this.toggleDataSeries
+      },
+      data: [...this.dataConfig]
     });
 
-    let data = await this.logsService.getUpdates();
-    let mq2: any = data.map(log => {
-      return log['sensorReadings']['MQ2'];
+    let sensorReadings: any = data.map(log => {
+      let d = log['sensorReadings'];
+      d['time'] = log['createdAt'];
+      return d;
     });
 
     let i = 0;
-    mq2.forEach((value: any) => {
-      this.dataPoints.push({ x: ++i, y: parseInt(value) });
+
+    sensorReadings.forEach((element: any) => {
+      for (const key in element) {
+        if (element.hasOwnProperty(key) && key != 'time') {
+          const value = element[key];
+          this.dataPoints[key].push({ x: new Date(element['time']), y: parseInt(value) });
+          dpsLength = this.dataPoints.length;
+        }
+      }
     });
-    dpsLength = this.dataPoints.length;
-    chart.render();
-    this.sub = interval(1000).subscribe(async val => {
-      let data = await this.logsService.getUpdates();
-      let mq2: any = data.map((log: any) => {
-        return log['sensorReadings']['MQ2'];
-      });
-
-      let j = i;
-      mq2.forEach((value: any) => {
-        this.dataPoints.push({ x: ++j, y: parseInt(value) });
-        dpsLength++;
-      });
-      i = j;
-
-      // if (dataPoints.length >  20 ) {
-      //       dataPoints.shift();
-      //     }
-      chart.render();
-    });
-
-    // async function updateChart(data:any) {
-    //   // let data = await logs.getUpdates();
-    //   let mq2:any = data.map((log:any) => {
-    //     return log["sensorReadings"]["MQ2"];
+    this.chart.render();
+    // this.sub = interval(1000).subscribe(async val => {
+    //   let data = await this.logsService.getUpdates();
+    //   let mq2: any = data.map((log: any) => {
+    //     return log['sensorReadings']['MQ2'];
     //   });
-    //   $.each(mq2, function(key:any, value:any) {
-    //     dataPoints.push({x: ++i, y: parseInt(value)});
+
+    //   let j = i;
+    //   mq2.forEach((value: any) => {
+    //     this.dataPoints["MQ2"].push({ x: ++j, y: parseInt(value) });
     //     dpsLength++;
     //   });
+    //   i = j;
 
     //   // if (dataPoints.length >  20 ) {
     //   //       dataPoints.shift();
     //   //     }
-    //   chart.render();
-    //   }
+    //   this.chart.render();
+    // });
   }
 }
