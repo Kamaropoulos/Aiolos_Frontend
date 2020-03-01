@@ -24,15 +24,16 @@ export class LogsService {
   }
 
   async getUpdates(): Promise<Array<Object>> {
+    let prevData = this.previousData;
     if (!this.previousData) {
       let data = await this.getLogs();
       this.previousData = data;
       return data;
     } else {
       let latestData = await this.getLogs();
-      let changes = latestData.filter(function(e) {
-        return this.indexOf(e) < 0;
-      }, this.previousData);
+
+      var changes = latestData.filter(item1 => !this.previousData.some(item2 => item2['_id'] === item1['_id']));
+
       this.previousData = latestData;
       return changes;
     }
