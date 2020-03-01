@@ -55,9 +55,11 @@ export class ChartComponent implements OnInit {
       title: {
         text: 'Sensor Readings'
       },
-      // axisX: {
-      //   title: "chart updates every second"
-      // },
+      axisX: {
+        scaleBreaks: {
+          autoCalculate: true
+        }
+      },
       toolTip: {
         shared: true
       },
@@ -89,23 +91,25 @@ export class ChartComponent implements OnInit {
       }
     });
     this.chart.render();
-    // this.sub = interval(1000).subscribe(async val => {
-    //   let data = await this.logsService.getUpdates();
-    //   let mq2: any = data.map((log: any) => {
-    //     return log['sensorReadings']['MQ2'];
-    //   });
 
-    //   let j = i;
-    //   mq2.forEach((value: any) => {
-    //     this.dataPoints["MQ2"].push({ x: ++j, y: parseInt(value) });
-    //     dpsLength++;
-    //   });
-    //   i = j;
-
-    //   // if (dataPoints.length >  20 ) {
-    //   //       dataPoints.shift();
-    //   //     }
-    //   this.chart.render();
-    // });
+    this.sub = interval(1000).subscribe(async val => {
+      let data = await this.logsService.getUpdates();
+      let sensorReadings: any = data.map(log => {
+        let d = log['sensorReadings'];
+        d['time'] = log['createdAt'];
+        return d;
+      });
+      sensorReadings.forEach((element: any) => {
+        for (const key in element) {
+          if (element.hasOwnProperty(key) && key != 'time') {
+            const value = element[key];
+            this.dataPoints[key].push({ x: new Date(element['time']), y: parseInt(value) });
+            dpsLength = this.dataPoints.length;
+          }
+        }
+        dpsLength++;
+      });
+      this.chart.render();
+    });
   }
 }
