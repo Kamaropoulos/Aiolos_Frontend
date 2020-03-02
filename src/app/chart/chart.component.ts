@@ -54,7 +54,8 @@ export class ChartComponent implements OnInit {
       exportEnabled: true,
       axisX: {
         scaleBreaks: {
-          autoCalculate: true
+          autoCalculate: true,
+          maxNumberOfAutoBreaks: 5
         }
       },
       toolTip: {
