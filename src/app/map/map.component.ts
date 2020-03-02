@@ -26,6 +26,9 @@ export class MapComponent implements OnInit {
 
   lastPoint: number[];
 
+  ommitedPoints: Number;
+  displayedPoints: Number;
+
   constructor(private logsService: LogsService) {}
 
   async ngOnInit() {
@@ -47,6 +50,11 @@ export class MapComponent implements OnInit {
       if (firstRun) {
         data = await this.logsService.getLogsFirstRun();
         firstRun = false;
+        if (data.length > 100) {
+          this.ommitedPoints = data.length;
+          data = data.slice(data.length - 100, data.length);
+        }
+        this.displayedPoints = data.length;
       } else {
         data = await this.logsService.getUpdates();
       }

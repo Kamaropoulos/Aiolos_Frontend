@@ -7,8 +7,7 @@
   <div class="mapDiv">
     <div #mapContainer id="map"></div>
   </div>
-  <!-- </div> -->
-  <ul>
-    <li *ngFor="let log of data; let i = index">{{ log.gps_data.longitude }} | {{ log.gps_data.latitude }}</li>
-  </ul>
+  <div *ngIf="displayedPoints" class="displayingOf">
+    Displaying last {{ displayedPoints }} records (ommited {{ ommitedPoints }} data points)
+  </div>
 </div>
