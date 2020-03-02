@@ -50,8 +50,10 @@ export class MapComponent implements OnInit {
       } else {
         data = await this.logsService.getUpdates();
       }
+      let newPointsCount = 0;
       for (let log of data) {
         if (log['gps_data']['status'] == 'A') {
+          newPointsCount++;
           let html =
             log['gps_data']['datestamp'] +
             ' ' +
@@ -73,11 +75,13 @@ export class MapComponent implements OnInit {
         }
         this.lastPoint = [log['gps_data']['longitude'], log['gps_data']['latitude']];
       }
-      this.map.flyTo({
-        center: [this.lastPoint[0], this.lastPoint[1]],
-        essential: true, // this animation is considered essential with respect to prefers-reduced-motion
-        zoom: 22
-      });
+      if (newPointsCount) {
+        this.map.flyTo({
+          center: [this.lastPoint[0], this.lastPoint[1]],
+          essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+          zoom: 22
+        });
+      }
     });
   }
 }
