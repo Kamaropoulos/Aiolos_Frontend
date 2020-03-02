@@ -83,8 +83,8 @@ export class MapComponent implements OnInit {
               .setLngLat([log['gps_data']['longitude'], log['gps_data']['latitude']])
               .setPopup(popup)
               .addTo(this.map);
+            this.lastPoint = [log['gps_data']['longitude'], log['gps_data']['latitude']];
           }
-          this.lastPoint = [log['gps_data']['longitude'], log['gps_data']['latitude']];
         }
         if (newPointsCount) {
           this.map.flyTo({
