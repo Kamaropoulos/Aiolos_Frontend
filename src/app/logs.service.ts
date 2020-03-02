@@ -32,8 +32,6 @@ export class LogsService {
   }
 
   async getUpdates(): Promise<Array<Object>> {
-    console.log(this.liveUpdate);
-
     let prevData = this.previousData;
     if (!this.previousData) {
       let data = await this.getLogs();
