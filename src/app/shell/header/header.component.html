@@ -35,6 +35,19 @@
             </button>
           </div>
         </div>
+        <div class="nav-item" style="padding-top: 6px;" ngbDropdown display="dynamic" placement="bottom-right">
+          <div title="{{ 'Live Update' | translate }}">
+            <input
+              type="checkbox"
+              name="toggle"
+              class="sw"
+              id="toggle-1"
+              [checked]="logService.liveUpdate"
+              (change)="logService.liveUpdate = !logService.liveUpdate"
+            />
+            <label for="toggle-1"></label>
+          </div>
+        </div>
       </div>
     </div>
   </nav>

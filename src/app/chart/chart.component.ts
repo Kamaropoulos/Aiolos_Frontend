@@ -91,23 +91,25 @@ export class ChartComponent implements OnInit {
     this.chart.render();
 
     this.sub = interval(1000).subscribe(async val => {
-      let data = await this.logsService.getUpdates();
-      let sensorReadings: any = data.map(log => {
-        let d = log['sensorReadings'];
-        d['time'] = log['createdAt'];
-        return d;
-      });
-      sensorReadings.forEach((element: any) => {
-        for (const key in element) {
-          if (element.hasOwnProperty(key) && key != 'time') {
-            const value = element[key];
-            this.dataPoints[key].push({ x: new Date(element['time']), y: parseInt(value) });
-            dpsLength = this.dataPoints.length;
+      if (this.logsService.liveUpdate) {
+        let data = await this.logsService.getUpdates();
+        let sensorReadings: any = data.map(log => {
+          let d = log['sensorReadings'];
+          d['time'] = log['createdAt'];
+          return d;
+        });
+        sensorReadings.forEach((element: any) => {
+          for (const key in element) {
+            if (element.hasOwnProperty(key) && key != 'time') {
+              const value = element[key];
+              this.dataPoints[key].push({ x: new Date(element['time']), y: parseInt(value) });
+              dpsLength = this.dataPoints.length;
+            }
           }
-        }
-        dpsLength++;
-      });
-      this.chart.render();
+          dpsLength++;
+        });
+        this.chart.render();
+      }
     });
   }
 }

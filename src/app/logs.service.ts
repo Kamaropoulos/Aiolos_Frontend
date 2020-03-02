@@ -9,6 +9,8 @@ import { map, catchError, last } from 'rxjs/operators';
 export class LogsService {
   constructor(private httpClient: HttpClient) {}
 
+  liveUpdate: Boolean = true;
+
   previousData: Array<Object> | undefined = undefined;
 
   getLogs(): Promise<Array<Object>> {
@@ -30,6 +32,8 @@ export class LogsService {
   }
 
   async getUpdates(): Promise<Array<Object>> {
+    console.log(this.liveUpdate);
+
     let prevData = this.previousData;
     if (!this.previousData) {
       let data = await this.getLogs();

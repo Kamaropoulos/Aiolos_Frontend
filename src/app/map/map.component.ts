@@ -48,49 +48,51 @@ export class MapComponent implements OnInit {
     var firstRun: Boolean = true;
 
     this.sub = interval(1000).subscribe(async val => {
-      let data: Array<Object>;
-      if (firstRun) {
-        data = await this.logsService.getLogsFirstRun();
-        firstRun = false;
-        if (data.length > this.pointsToDisplay) {
-          this.ommitedPoints = data.length - this.pointsToDisplay;
-          data = data.slice(data.length - this.pointsToDisplay, data.length);
-        }
-      } else {
-        data = await this.logsService.getUpdates();
-      }
-      let newPointsCount = 0;
-      this.displayedPoints = this.displayedPoints + data.length;
-      for (let log of data) {
-        if (log['gps_data']['status'] == 'A') {
-          newPointsCount++;
-          let html =
-            log['gps_data']['datestamp'] +
-            ' ' +
-            log['gps_data']['timestamp'] +
-            '<br><table><tr><th>Sensor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Reading</th></tr>';
-          for (let record in log['sensorReadings']) {
-            if (Object.prototype.hasOwnProperty.call(log['sensorReadings'], record)) {
-              html += '<tr><td>' + record + '</td>' + '<td>' + log['sensorReadings'][record] + '</td></tr>';
-            }
+      if (this.logsService.liveUpdate || firstRun) {
+        let data: Array<Object>;
+        if (firstRun) {
+          data = await this.logsService.getLogsFirstRun();
+          firstRun = false;
+          if (data.length > this.pointsToDisplay) {
+            this.ommitedPoints = data.length - this.pointsToDisplay;
+            data = data.slice(data.length - this.pointsToDisplay, data.length);
           }
-          html += '</table>';
-          var popup = new mapboxgl.Popup({ offset: 25 }).setHTML(html);
-          var marker = new mapboxgl.Marker({
-            draggable: false
-          })
-            .setLngLat([log['gps_data']['longitude'], log['gps_data']['latitude']])
-            .setPopup(popup)
-            .addTo(this.map);
+        } else {
+          data = await this.logsService.getUpdates();
         }
-        this.lastPoint = [log['gps_data']['longitude'], log['gps_data']['latitude']];
-      }
-      if (newPointsCount) {
-        this.map.flyTo({
-          center: [this.lastPoint[0], this.lastPoint[1]],
-          essential: true, // this animation is considered essential with respect to prefers-reduced-motion
-          zoom: 22
-        });
+        let newPointsCount = 0;
+        this.displayedPoints = this.displayedPoints + data.length;
+        for (let log of data) {
+          if (log['gps_data']['status'] == 'A') {
+            newPointsCount++;
+            let html =
+              log['gps_data']['datestamp'] +
+              ' ' +
+              log['gps_data']['timestamp'] +
+              '<br><table><tr><th>Sensor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Reading</th></tr>';
+            for (let record in log['sensorReadings']) {
+              if (Object.prototype.hasOwnProperty.call(log['sensorReadings'], record)) {
+                html += '<tr><td>' + record + '</td>' + '<td>' + log['sensorReadings'][record] + '</td></tr>';
+              }
+            }
+            html += '</table>';
+            var popup = new mapboxgl.Popup({ offset: 25 }).setHTML(html);
+            var marker = new mapboxgl.Marker({
+              draggable: false
+            })
+              .setLngLat([log['gps_data']['longitude'], log['gps_data']['latitude']])
+              .setPopup(popup)
+              .addTo(this.map);
+          }
+          this.lastPoint = [log['gps_data']['longitude'], log['gps_data']['latitude']];
+        }
+        if (newPointsCount) {
+          this.map.flyTo({
+            center: [this.lastPoint[0], this.lastPoint[1]],
+            essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+            zoom: 22
+          });
+        }
       }
     });
   }
