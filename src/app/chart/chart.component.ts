@@ -52,9 +52,6 @@ export class ChartComponent implements OnInit {
       zoomEnabled: true,
       animationEnabled: true,
       exportEnabled: true,
-      title: {
-        text: 'Sensor Readings'
-      },
       axisX: {
         scaleBreaks: {
           autoCalculate: true

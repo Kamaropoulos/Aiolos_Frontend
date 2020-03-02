@@ -1,7 +1,10 @@
 {
   "APP_NAME": "Aiolos",
-  "About": "About",
-  "Hello world !": "Hello world !",
   "Home": "Home",
-  "Version": "Version"
+  "Map": "Map",
+  "Chart": "Chart",
+  "Home | Aiolos": "Home | Aiolos",
+  "Map | Aiolos": "Map | Aiolos",
+  "Chart | Aiolos": "Chart | Aiolos",
+  "ChartTitle": "Sensor Readings"
 }
