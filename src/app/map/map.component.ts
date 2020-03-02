@@ -15,6 +15,8 @@ import { interval } from 'rxjs';
 export class MapComponent implements OnInit {
   version: string | null = environment.version;
 
+  pointsToDisplay = 10;
+
   // data: Array<Object>;
 
   map: mapboxgl.Map;
@@ -26,8 +28,8 @@ export class MapComponent implements OnInit {
 
   lastPoint: number[];
 
-  ommitedPoints: Number;
-  displayedPoints: Number;
+  ommitedPoints: number = 0;
+  displayedPoints: number = 0;
 
   constructor(private logsService: LogsService) {}
 
@@ -50,15 +52,15 @@ export class MapComponent implements OnInit {
       if (firstRun) {
         data = await this.logsService.getLogsFirstRun();
         firstRun = false;
-        if (data.length > 100) {
-          this.ommitedPoints = data.length;
-          data = data.slice(data.length - 100, data.length);
+        if (data.length > this.pointsToDisplay) {
+          this.ommitedPoints = data.length - this.pointsToDisplay;
+          data = data.slice(data.length - this.pointsToDisplay, data.length);
         }
-        this.displayedPoints = data.length;
       } else {
         data = await this.logsService.getUpdates();
       }
       let newPointsCount = 0;
+      this.displayedPoints = this.displayedPoints + data.length;
       for (let log of data) {
         if (log['gps_data']['status'] == 'A') {
           newPointsCount++;
