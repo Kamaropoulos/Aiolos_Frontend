@@ -6,7 +6,7 @@ import { MapComponent } from './map.component';
 
 const routes: Routes = [
   // Module is lazy loaded, see app-routing.module.ts
-  { path: '', component: MapComponent, data: { title: extract('Map') } }
+  { path: '', component: MapComponent, data: { title: extract('Map | Aiolos') } }
 ];
 
 @NgModule({

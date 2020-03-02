@@ -6,7 +6,7 @@ import { ChartComponent } from './chart.component';
 
 const routes: Routes = [
   // Module is lazy loaded, see app-routing.module.ts
-  { path: '', component: ChartComponent, data: { title: extract('Chart') } }
+  { path: '', component: ChartComponent, data: { title: extract('Chart | Aiolos') } }
 ];
 
 @NgModule({
