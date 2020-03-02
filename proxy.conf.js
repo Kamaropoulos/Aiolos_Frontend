@@ -1,4 +1,5 @@
 const HttpsProxyAgent = require('https-proxy-agent');
+const isDocker = require('is-docker');
 
 /*
  * API proxy configuration.
@@ -6,11 +7,24 @@ const HttpsProxyAgent = require('https-proxy-agent');
  * This is especially useful during app development to avoid CORS issues while running a local server.
  * For more details and options, see https://angular.io/guide/build#using-corporate-proxy
  */
+
+console.log('ISDOCKER? = ' + isDocker());
+
+let hostname;
+
+if (isDocker()) {
+  hostname = 'backend';
+} else {
+  hostname = 'localhost';
+}
+
+console.log(hostname);
+
 const proxyConfig = [
   {
     context: '/api',
     pathRewrite: { '^/api': '' },
-    target: 'https://api.chucknorris.io',
+    target: 'http://' + hostname + ':3000',
     changeOrigin: true,
     secure: false
   }

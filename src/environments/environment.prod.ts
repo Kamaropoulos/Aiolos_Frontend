@@ -10,7 +10,10 @@ export const environment = {
   production: true,
   hmr: false,
   version: env.npm_package_version,
-  serverUrl: 'https://api.chucknorris.io',
+  serverUrl: 'http://154.57.7.115:3000',
   defaultLanguage: 'en-US',
-  supportedLanguages: ['en-US', 'el-GR']
+  supportedLanguages: ['en-US', 'el-GR'],
+  mapbox: {
+    accessToken: 'pk.eyJ1Ijoia2FtYXJvcG91bG9zIiwiYSI6ImNrNzN0dzBxcjAxbzUza3Bhb2Jnd2c2cWIifQ.7CvFsos8lOlKopFajrf2FA'
+  }
 };

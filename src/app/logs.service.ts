@@ -13,7 +13,7 @@ export class LogsService {
 
   getLogs(): Promise<Array<Object>> {
     return this.httpClient
-      .get('http://192.168.100.4:3000/logs')
+      .get('/logs')
       .pipe(
         map((body: any) => {
           return body;
