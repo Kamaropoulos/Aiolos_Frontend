@@ -11,7 +11,7 @@ import { LogsService } from '@app/logs.service';
 export class HeaderComponent implements OnInit {
   menuHidden = true;
 
-  constructor(private i18nService: I18nService, private logService: LogsService) {}
+  constructor(private i18nService: I18nService, public logService: LogsService) {}
 
   ngOnInit() {}
 

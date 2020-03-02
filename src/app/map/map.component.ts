@@ -17,8 +17,6 @@ export class MapComponent implements OnInit {
 
   pointsToDisplay = 10;
 
-  // data: Array<Object>;
-
   map: mapboxgl.Map;
   style = 'mapbox://styles/mapbox/streets-v11';
   lat = 37.9838;

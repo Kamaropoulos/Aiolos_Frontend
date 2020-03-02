@@ -4,6 +4,7 @@ import { Shell } from '@app/shell/shell.service';
 
 const routes: Routes = [
   Shell.childRoutes([
+    { path: '', loadChildren: './map/map.module#MapModule' },
     { path: 'map', loadChildren: './map/map.module#MapModule' },
     { path: 'chart', loadChildren: './chart/chart.module#ChartModule' }
   ]),
