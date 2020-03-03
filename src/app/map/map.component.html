@@ -3,6 +3,7 @@
     <div #mapContainer id="map"></div>
   </div>
   <div *ngIf="displayedPoints" class="displayingOf">
-    Displaying last {{ displayedPoints }} records (ommited {{ ommitedPoints }} data points)
+    {{ 'DisplayingLast' | translate }} {{ displayedPoints }} {{ 'records' | translate }} ({{ 'ommited' | translate }}
+    {{ ommitedPoints }} {{ 'dataPoints' | translate }})
   </div>
 </div>

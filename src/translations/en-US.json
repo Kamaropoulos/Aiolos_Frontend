@@ -7,5 +7,9 @@
   "Map | Aiolos": "Map | Aiolos",
   "Chart | Aiolos": "Chart | Aiolos",
   "ChartTitle": "Sensor Readings",
-  "Live Update": "Live Update"
+  "Live Update": "Live Update",
+  "DisplayingLast": "Displaying last",
+  "records": "records",
+  "ommited": "ommited",
+  "dataPoints": "data points"
 }
