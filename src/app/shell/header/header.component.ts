@@ -11,6 +11,9 @@ import { LogsService } from '@app/logs.service';
 export class HeaderComponent implements OnInit {
   menuHidden = true;
 
+  // This file is prety much the defult boilerplate header, except for the logService object.
+  // We keep this here for a handy reference to the liveUpdates attribute of the LogsService,
+  // so we can turn it on and off from the toggle in the header.
   constructor(private i18nService: I18nService, public logService: LogsService) {}
 
   ngOnInit() {}
